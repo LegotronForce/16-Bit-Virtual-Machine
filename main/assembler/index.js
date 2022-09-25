@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const parser = require('./parser');
 const instructions = require('../instructions');
 const registers = require('../registers');
@@ -8,25 +10,7 @@ const registerMap = registers.reduce((map, regName, index) => {
   return map;
 }, {});
 
-const exampleProgram = `
-
-structure Rectangle {
-  x: $2,
-  y: $2,
-  w: $2,
-  h: $2
-}
-
-
-
-start_of_code:
-  mov &[ <Rectangle> myRectangle.y ], r1
-
-  data16 myRectangle = { $A3, $1B, $04, $10 }
-
-`.trim();
-
-const parsedOutput = parser.run(exampleProgram);
+const parsedOutput = parser.run(fs.readFileSync(program.argv[1]).toString());
 
 if (parsedOutput.isError) {
   throw new Error(parsedOutput.error);
